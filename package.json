@@ -1,0 +1,19 @@
+{
+  "name": "globom-server-node",
+  "version": "1.0.0",
+  "description": "A simple REST APII completely from pure NODEJS for globoM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Indika_M",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "uuidv4": "^6.2.6"
+  }
+}
