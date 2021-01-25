@@ -28,8 +28,41 @@ function create(user) {
 	}
     })
 }
+
+function update(user, id) {
+    return new Promise((resolve, reject) => {
+	try {
+	    const updatedUser = {id, ...user}
+	    const index  = users.findIndex((user) => user.id === id)
+	    users[index] = updatedUser
+    	    writeDataToFile('data/users.json', users)
+    	    resolve(updatedUser)
+	} catch(error) {
+	   console.log(error) 
+	   reject(error)
+	}
+    })
+}
+
+function deleteUser(id) {
+    return new Promise((resolve, reject) => {
+	try {
+	    // Can also use users = users.filter((user) => users.id != id)
+	    const index = users.findIndex((user) => user.id === id)
+	    users.splice(index,1)
+    	    writeDataToFile('data/users.json', users)
+    	    resolve(true)
+	} catch(error) {
+	   console.log(error) 
+	   reject(error)
+	}
+    })
+}
+
 module.exports = {
     findAll,
     findById,
-    create
+    create,
+    update,
+    deleteUser,
 }
