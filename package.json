@@ -11,9 +11,13 @@
   "author": "Indika_M",
   "license": "MIT",
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "formidable": "^1.2.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.5.1",
     "uuidv4": "^6.2.6"
   }

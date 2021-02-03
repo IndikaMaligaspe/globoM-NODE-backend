@@ -44,20 +44,47 @@ async function findById(id){
     }) 
 }
 
+async function getUserByEmail(email, password=false){
+    return new Promise(async (resolve, reject) => {
+
+		const db = await pool.connect();
+		let passwordCol = '';
+		if (password) {
+			passwordCol = 'password, ';
+		}
+		const user = await db.query(
+		`SELECT id, first_name, last_name, ${passwordCol} email,is_active, created_on
+		 FROM users
+		 WHERE email = $1`,
+		 [email],
+		 (error, result) => {
+			if (error) {
+				console.log(error);
+				reject(error)
+		    }else{
+				db.release();
+				resolve(result.rows[0]);
+			}
+		 }
+		);
+    }) 
+}
+
 async function create(user) {
     return new Promise(async (resolve, reject) => {
 	try {
 	    const newUser = {id: uuid(), ...user}
-        const db = await pool.connect();
+		const db = await pool.connect();
 		await db.query(`
 			INSERT INTO users 
-			(id, first_name, last_name, email, is_active, created_on)
+			(id, first_name, last_name, email, password, is_active, created_on)
 			VALUES	
-			($1, $2, $3, $4, $5, $6)`, 
+			($1, $2, $3, $4, $5, $6, $7)`, 
 			[newUser.id,
 			newUser.firstName,
 			newUser.lastName,
 			newUser.email,
+			newUser.password,
 			newUser.isActive,
 			newUser.createdOn], (error, result) => {
 			 if (error) {
@@ -141,4 +168,5 @@ module.exports = {
     create,
     update,
     deleteUser,
+	getUserByEmail,
 }
