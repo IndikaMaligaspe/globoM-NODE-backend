@@ -1,5 +1,6 @@
 const users = require('../models/user')
 const { getPostData, generateHash } = require ('../utils')
+const { verifyToken }  = require('../middleware/verifyToken')
 
 async function getUsers(req, res) {
     try{
@@ -9,28 +10,31 @@ async function getUsers(req, res) {
     }catch (error) {
     	res.writeHead(500, {'Content-Type':'application/json'})
     	res.end(JSON.stringify(err))
-    }
-}
 
-async function getUser(req, res, id ) {
-    try{
-	const user = await users.findById(id)
-	if (!user) {
-	    res.writeHead(404, {'Content-Type':'application/json'});
-	    res.end(JSON.stringify({message:'User not found !!'}));
-	}else {
-	    res.writeHead(200, {'Content-Type':'application/json'});
-    	res.end(JSON.stringify(user));
 	}
-
-    }catch(error) {
-	console.log(error)
-     	res.writeHead(500, {'Content-Type':'application/json'});
-    	res.end(JSON.stringify(error));
-    }
 }
+
+async function getUser(req, res, id) {
+	verifyToken(req, res);
+    try{
+		const user = await users.findById(id)
+		if (!user) {
+			res.writeHead(404, {'Content-Type':'application/json'});
+			res.end(JSON.stringify({message:'User not found !!'}));
+		}else {
+			res.writeHead(200, {'Content-Type':'application/json'});
+			res.end(JSON.stringify(user));
+		}
+	}catch(error) {
+		console.log(error)
+		res.writeHead(500, {'Content-Type':'application/json'});
+		res.end(JSON.stringify(error));
+	}
+}
+
 
 async function createUser(req, res) {
+	verifyToken(req, res);
 	try{
 		const data = await getPostData(req);
 		const { firstName, lastName, email, password, isActive, createdOn } = JSON.parse(data);
@@ -60,6 +64,7 @@ async function createUser(req, res) {
 }
 
 async function updateUser(req, res, id){
+	verifyToken(req, res);
     try{
 		const user = await users.findById(id);
 		if (!user) {
@@ -93,18 +98,19 @@ async function updateUser(req, res, id){
 }
 
 async function deleteUser(req, res, id){
+	verifyToken(req, res);
     try{
-	const user = await users.findById(id)
-	if (!user) {
-	    res.writeHead(404, {'Content-Type':'application/json'})
-	    res.end(JSON.stringify({message:'User not found !!'}))
-	}else {
-	     await users.deleteUser(id)
-             res.writeHead(200, {'Content-Type':'application/json'})
-             return res.end(JSON.stringify({message: 'user deleted'}))
-	}
-    }catch(error) {
-	console.log('Error - >',error)
+		const user = await users.findById(id)
+		if (!user) {
+			res.writeHead(404, {'Content-Type':'application/json'})
+			res.end(JSON.stringify({message:'User not found !!'}))
+		}else {
+			 await users.deleteUser(id)
+				 res.writeHead(200, {'Content-Type':'application/json'})
+				 return res.end(JSON.stringify({message: 'user deleted'}))
+		}
+	}catch(error) {
+		console.log('Error - >',error)
      	res.writeHead(500, {'Content-Type':'application/json'})
     	res.end(JSON.stringify(error))
     }

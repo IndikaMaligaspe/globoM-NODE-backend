@@ -48,6 +48,7 @@ function getFormPostData(req){
 	})
 }
 
+
 async function generateHash(code){
 	const salt = await bcrypt.genSalt(SALT_FACTOR)
 	code = await bcrypt.hash(code, salt );

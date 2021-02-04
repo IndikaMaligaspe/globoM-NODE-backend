@@ -1,7 +1,5 @@
-const users = require('../data/users')
 const { pool } = require('../data/pg_pool.js')
 const { uuid } = require('uuidv4')
-const { writeDataToFile } = require('../utils.js')
 
 async function findAll(){
 	return new Promise(async (resolve, reject) => {
@@ -105,7 +103,6 @@ async function update(user, id) {
     return new Promise(async (resolve, reject) => {
 	try {
 	    const updatedUser = {id, ...user}
-		console.log(updatedUser);
         const db = await pool.connect();
 		await db.query(`
 			UPDATE  users
