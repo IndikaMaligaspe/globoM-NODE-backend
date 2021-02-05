@@ -150,8 +150,9 @@ async function update(transaction, id) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const updateTransaction = {id: id, ...transaction}
+
 			const db = await pool.connect();
-			await db.query(`
+			await db.query(` 
 				UPDATE transactions
 				SET
 					transaction_date = $1, 
@@ -161,18 +162,18 @@ async function update(transaction, id) {
 					deposit = $5, 
 					notes = $6, 
 					created_on = $7,
-					user_id = $8,
+					user_id = $8
 				WHERE
 					id = $9
-				`
-				[updateTransaction.transaction_date,
-				updateTransaction.transaction_type,
+				`,
+				[updateTransaction.transactionDate,
+				updateTransaction.transactionType,
 				updateTransaction.description,
 				updateTransaction.charge,
 				updateTransaction.deposit,
 				updateTransaction.notes,
-				updateTransaction.created_on,
-				updateTransaction.user_id ,
+				updateTransaction.createdOn,
+				updateTransaction.userId ,
 				updateTransaction.id], (error, result) => {
 				 if (error) {
 					console.log(error) 

@@ -2,7 +2,7 @@ const http = require('http')
 require('dotenv').config()
 
 const { getUsers, getUser, createUser, updateUser, deleteUser} = require('./controllers/userController')
-const { getTransactionById, getTransactionByYearMonth, getBalanceByYearMonthUser, createTransactions } = require('./controllers/transactionController')
+const { getTransactionById, getTransactionByYearMonth, getBalanceByYearMonthUser, createTransactions , updateTransactions, deleteTransactionById } = require('./controllers/transactionController')
 const { login } = require('./controllers/auth')
 
 const server = http.createServer((req, res) => {
@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
 		updateTransactions(req, res, id)
     } else if ( req.url.match(/\/api\/transactions\/([a-zA-Z0-9]+)/) && req.method === 'DELETE' ) {
 		const id = req.url.split('/')[3]
-		deleteTransactions(req, res, id)
+		deleteTransactionById(req, res, id)
 	} else if (req.url === '/api/login' && req.method === 'POST') {
 		login(req, res);
 	} else {
